@@ -6,7 +6,7 @@ def main():
     img = cv2.imread(str(path) + '/lena-1.png')             # read an image
     print_image_information(img)
 
-    video()
+    
     
 
 def print_image_information(img):

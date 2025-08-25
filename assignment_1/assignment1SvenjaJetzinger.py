@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 
 def main():
-    path = 'assignment_#. Ex. nnoori/IKT213_noori/assignment_1'
+    path = 'assignment_1'
     img = cv2.imread(str(path) + '/lena-1.png')             # read an image
     print_image_information(img)
 

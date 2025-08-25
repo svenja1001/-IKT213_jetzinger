@@ -3,7 +3,7 @@ import cv2
 from matplotlib import pyplot as plt
 
 def main():
-    path = 'assignment_#. Ex. nnoori/IKT213_noori/assignment_2'
+    path = 'assignment_2'
     img = cv2.imread(str(path) + '/lena-2.png')                     # read/load the image
     
     # Border width for padding
@@ -38,7 +38,7 @@ def main():
 
     smoothing(img)
 
-    rotation_angle = 180                                           # rotation angle in degrees (90, 180, or any other angle)
+    rotation_angle = 90                                             # rotation angle in degrees (90, 180, or any other angle)
     rotation(img, rotation_angle)
     
     plt.show()                                                      # show all images in one window
@@ -62,7 +62,7 @@ def crop(img, x_0, x_1, y_0, y_1):
     plt.imshow(cropped_rgb) 
     plt.title('Cropped Image')
     plt.axis('off')
-    
+
 
 # Resizing
 def resize(img, resize_width, resize_height):
@@ -72,7 +72,7 @@ def resize(img, resize_width, resize_height):
     plt.imshow(resized_rgb)
     plt.title('Resized Image')
     plt.axis('off')
-
+    
 
 # Manual copy
 def copy(img, emptyPictureArray):
@@ -82,7 +82,7 @@ def copy(img, emptyPictureArray):
     plt.imshow(copied_rgb)
     plt.title('Manual Copy')        
     plt.axis('off')
-
+    
 
 # Grayscale
 def grayscale(img):
@@ -91,7 +91,7 @@ def grayscale(img):
     plt.imshow(gray, cmap='gray')                                   # display the grayscale image
     plt.title('Grayscale Image')
     plt.axis('off')
-
+    
 
 # HSV -> Hue (Farbton), Saturation (Sättigung), Value (Helligkeit)
 def hsv(img):
@@ -100,7 +100,7 @@ def hsv(img):
     plt.imshow(hsv_img)
     plt.title('HSV Image')
     plt.axis('off')
-
+    
 
 # Color shifting
 def hue_shifted(img, emptyPictureArray, hue):
@@ -113,7 +113,7 @@ def hue_shifted(img, emptyPictureArray, hue):
     plt.imshow(shifted_rgb)
     plt.title(f'Value Shifted ({hue})')
     plt.axis('off')
-
+    
 
 # Smoothing
 def smoothing(img):
@@ -123,7 +123,7 @@ def smoothing(img):
     plt.imshow(smoothed_rgb)
     plt.title('Smoothed Image')
     plt.axis('off')
-
+    
 
 # Rotation
 def rotation(img, rotation_angle):
@@ -140,7 +140,6 @@ def rotation(img, rotation_angle):
     plt.imshow(rotated_rgb)
     plt.title(f'Rotated Image ({rotation_angle}°)')
     plt.axis('off')
-
-#test 
+    
 
 main()

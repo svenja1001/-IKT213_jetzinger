@@ -18,6 +18,11 @@ def main():
     template = cv2.imread(str(path) + '/shapes_template.jpg')               # read/load the template image
     template_match(picture, template, path)
 
+    # Resize
+    scale_factor: int = 2
+    up_or_down: str = "down"                          # choose between: "up" for upscaling or "down" for downscaling
+    resize(img, scale_factor, up_or_down, path)
+
     
 
 
@@ -81,6 +86,28 @@ def template_match(picture, template, path):
     # Save image into the assignment_3 folder
     cv2.imwrite(str(path) + '/template_match_SvenjaJetzinger_A3.png', picture)
     
+
+# Resizing
+def resize(img, scale_factor:int, up_or_down:str, path):
+    resized_img = img.copy()
+    for _ in range(scale_factor):
+        # Upscaling
+        if up_or_down == "up":
+            resized_img = cv2.pyrUp(resized_img)
+        # Downscaling
+        elif up_or_down == "down":
+            resized_img = cv2.pyrDown(resized_img)
+        else:
+            print("Error: up_or_down must be either 'up' or 'down'.")
+            return
+    # Show image
+    plt.imshow(cv2.cvtColor(resized_img, cv2.COLOR_BGR2RGB))
+    plt.title(f'Resized Image ({up_or_down})')
+    plt.axis('off')
+    plt.show()
+    # Save image into the assignment_3 folder
+    cv2.imwrite(str(path) + f'/resized_{up_or_down}_SvenjaJetzinger_A3.png', resized_img)
+
 
 
 

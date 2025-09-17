@@ -21,9 +21,10 @@ def sobel_edge_detection(img):
     sobel_y = cv2.Sobel(blur, cv2.CV_64F, 0, 1, ksize=1)            # Sobel in y direction with dx=0, dy=1
     sobel_combined = cv2.magnitude(sobel_x, sobel_y)                # Combine the two directions (x and y)
     # Show image
-    plt.imshow(sobel_combined)
+    plt.imshow(sobel_combined, cmap='gray')
     plt.title('Sobel Edge Detection')
     plt.axis('off')
+    plt.show()
 
 
 

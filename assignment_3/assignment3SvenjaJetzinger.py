@@ -8,7 +8,10 @@ def main():
     
     sobel_edge_detection(img, path)
 
-    canny_edge_detection(img)
+    # Threshold for canny edge detection
+    threshold_1 = 50
+    threshold_2 = 50
+    canny_edge_detection(img, threshold_1, threshold_2, path)
     
 
 
@@ -29,22 +32,24 @@ def sobel_edge_detection(img, path):
     plt.axis('off')
     plt.show()
     # Save image into the assignment_3 folder
-    cv2.imwrite(str(path) + '/lambo_sobel_edge_detection.png', sobel_combined)
+    cv2.imwrite(str(path) + '/lambo_sobel_SvenjaJetzinger_A3.png', sobel_combined)
 
 
 # Canny edge detection
-def canny_edge_detection(img):
+def canny_edge_detection(img, threshold_1, threshold_2, path):
     # Convert to grayscale
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)   
     # Blur the image to reduce noise
     blur = cv2.GaussianBlur(gray, (3, 3), 0)                        # ksize=(3,3), sigmaX=0
     # Canny edge detection
-    canny = cv2.Canny(blur, 100, 200)                               # thresholds: 100 and 200
+    canny = cv2.Canny(blur, threshold_1, threshold_2)
     # Show image
     plt.imshow(canny, cmap='gray')
     plt.title('Canny Edge Detection')
     plt.axis('off')
-    plt.show()  # Bild anzeigen
+    plt.show()
+    # Save image into the assignment_3 folder
+    cv2.imwrite(str(path) + '/lambo_canny_SvenjaJetzinger_A3.png', canny)
 
 
 main()

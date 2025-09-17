@@ -12,6 +12,12 @@ def main():
     threshold_1 = 50
     threshold_2 = 50
     canny_edge_detection(img, threshold_1, threshold_2, path)
+
+    # Template match
+    picture = cv2.imread(str(path) + '/shapes.png')                         # read/load the main image
+    template = cv2.imread(str(path) + '/shapes_template.jpg')               # read/load the template image
+    template_match(picture, template, path)
+
     
 
 
@@ -53,7 +59,29 @@ def canny_edge_detection(img, threshold_1, threshold_2, path):
 
 
 # Template match
-def template_match(img, template):
+def template_match(picture, template, path):
+    # Convert both images to grayscale
+    picture_gray = cv2.cvtColor(picture, cv2.COLOR_BGR2GRAY)
+    template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+    # Get the width and height of the template
+    h, w = template_gray.shape
+    # Perform template matching
+    result = cv2.matchTemplate(picture_gray, template_gray, cv2.TM_CCOEFF_NORMED)
+    # Set a threshold for detecting matches
+    threshold = 0.9
+    loc = np.where(result >= threshold)
+    # Draw red rectangles around detected matches -> found all left corners of rectangles because of grayscale; not possible in RGB!
+    for pt in zip(*loc[::-1]):                                                  # Switch columns and rows
+        cv2.rectangle(picture, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)      # Rot: (b=0, g=0, r=255)
+    # Show image
+    plt.imshow(cv2.cvtColor(picture, cv2.COLOR_BGR2RGB))
+    plt.title('Template Matching')
+    plt.axis('off')
+    plt.show()
+    # Save image into the assignment_3 folder
+    cv2.imwrite(str(path) + '/template_match_SvenjaJetzinger_A3.png', picture)
     
+
+
 
 main()

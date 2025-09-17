@@ -20,13 +20,11 @@ def main():
 
     # Resize
     scale_factor: int = 2
-    up_or_down: str = "down"                          # choose between: "up" for upscaling or "down" for downscaling
+    up_or_down: str = "up"                          # choose between: "up" for upscaling or "down" for downscaling
     resize(img, scale_factor, up_or_down, path)
 
+
     
-
-
-
 # Sobel edge detection
 def sobel_edge_detection(img, path):
     # Convert to grayscale
@@ -107,8 +105,6 @@ def resize(img, scale_factor:int, up_or_down:str, path):
     plt.show()
     # Save image into the assignment_3 folder
     cv2.imwrite(str(path) + f'/resized_{up_or_down}_SvenjaJetzinger_A3.png', resized_img)
-
-
 
 
 main()

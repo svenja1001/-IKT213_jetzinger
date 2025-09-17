@@ -6,12 +6,15 @@ def main():
     path = 'assignment_3'
     img = cv2.imread(str(path) + '/lambo.png')                     # read/load the image
     
-    sobel_edge_detection(img)
+    sobel_edge_detection(img, path)
+
+    canny_edge_detection(img)
+    
 
 
 
 # Sobel edge detection
-def sobel_edge_detection(img):
+def sobel_edge_detection(img, path):
     # Convert to grayscale
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)   
     # Blur the image to reduce noise
@@ -25,8 +28,23 @@ def sobel_edge_detection(img):
     plt.title('Sobel Edge Detection')
     plt.axis('off')
     plt.show()
+    # Save image into the assignment_3 folder
+    cv2.imwrite(str(path) + '/lambo_sobel_edge_detection.png', sobel_combined)
 
 
+# Canny edge detection
+def canny_edge_detection(img):
+    # Convert to grayscale
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)   
+    # Blur the image to reduce noise
+    blur = cv2.GaussianBlur(gray, (3, 3), 0)                        # ksize=(3,3), sigmaX=0
+    # Canny edge detection
+    canny = cv2.Canny(blur, 100, 200)                               # thresholds: 100 and 200
+    # Show image
+    plt.imshow(canny, cmap='gray')
+    plt.title('Canny Edge Detection')
+    plt.axis('off')
+    plt.show()  # Bild anzeigen
 
 
 main()

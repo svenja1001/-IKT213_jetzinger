@@ -52,4 +52,8 @@ def canny_edge_detection(img, threshold_1, threshold_2, path):
     cv2.imwrite(str(path) + '/lambo_canny_SvenjaJetzinger_A3.png', canny)
 
 
+# Template match
+def template_match(img, template):
+    
+
 main()

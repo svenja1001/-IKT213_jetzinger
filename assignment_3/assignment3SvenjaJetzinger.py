@@ -20,7 +20,7 @@ def main():
 
     # Resize
     scale_factor: int = 2
-    up_or_down: str = "up"                          # choose between: "up" for upscaling or "down" for downscaling
+    up_or_down: str = "down"                          # choose between: "up" for upscaling or "down" for downscaling
     resize(img, scale_factor, up_or_down, path)
 
 

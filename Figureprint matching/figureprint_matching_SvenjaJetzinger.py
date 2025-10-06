@@ -7,16 +7,22 @@ def main():
     path = 'Figureprint matching'
     
     # Fingerprint images same
-    same1 = cv2.imread(str(path) + '/same5_1.tif')                      # read/load the image
-    same2 = cv2.imread(str(path) + '/same5_2.tif')                      # read/load the image
+    same1 = cv2.imread(str(path) + '/same_5/same5_1.tif')                      # read/load the image
+    same2 = cv2.imread(str(path) + '/same_5/same5_2.tif')                      # read/load the image
 
     # Fingerprint images different
-    different1 = cv2.imread(str(path) + '/dif3_1.tif')                  # read/load the image
-    different2 = cv2.imread(str(path) + '/dif3_2.tif')                  # read/load the image
+    different1 = cv2.imread(str(path) + '/different_3/dif3_1.tif')                  # read/load the image
+    different2 = cv2.imread(str(path) + '/different_3/dif3_2.tif')                  # read/load the image
+    # comment out to compare different images
+    #same1 = different1
+    #same2 = different2
 
     # UIA images
-    UIA1 = cv2.imread(str(path) + '/UIA_1.png')                         # read/load the image
-    UIA2 = cv2.imread(str(path) + '/UIA_2.png')                         # read/load the image
+    UIA1 = cv2.imread(str(path) + '/UIA1.png')                         # read/load the image
+    UIA2 = cv2.imread(str(path) + '/UIA2.png')                         # read/load the image
+    # comment out to compare different images
+    #same1 = UIA1
+    #same2 = UIA2
 
     # ORB
     result_orb = orb_match(same1, same2)

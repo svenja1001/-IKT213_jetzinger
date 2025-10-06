@@ -2,3 +2,90 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
+def main():
+    path = 'assignment_4'
+    img = cv2.imread(str(path) + '/reference_image.png')                     # read/load the reference image
+    
+    harris_corner_detection(img)
+
+    # Bilder laden
+    im1 = cv2.imread(str(path) + 'align_this.jpg')          # image_to_align_path
+    im2 = img                                               # reference_image_path
+
+    max_feature = 1500
+    good_match_precent = 0.15
+
+    align_images(im1, im2, max_feature, good_match_precent)
+
+
+# Harris Corner Detection
+def harris_corner_detection(img):
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = np.float32(gray)
+    dst = cv2.cornerHarris(gray, blockSize=2, ksize=3, k=0.04)
+    dst = cv2.dilate(dst, None)                         # make edges clearer
+
+    img[dst > 0.01 * dst.max()] = [0, 0, 255]           # mark corners in original picture (red)
+    cv2.imwrite('assignment_4/harris.png', img)         # save result
+
+    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.title('Harris Corners')
+    plt.axis('off')
+    plt.show()
+
+# Feature-Based Image Alignment using ORB
+def align_images(image_to_align_path, reference_image_path, max_features, good_match_percent):
+    
+    # In Graustufen umwandeln
+    im1_gray = cv2.cvtColor(image_to_align_path, cv2.COLOR_BGR2GRAY)
+    im2_gray = cv2.cvtColor(reference_image_path, cv2.COLOR_BGR2GRAY)
+
+    # ORB-Features und Deskriptoren finden
+    orb = cv2.ORB_create(max_features)
+    keypoints1, descriptors1 = orb.detectAndCompute(im1_gray, None)
+    keypoints2, descriptors2 = orb.detectAndCompute(im2_gray, None)
+
+    # Matcher initialisieren
+    matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=False)
+    matches = matcher.match(descriptors1, descriptors2, None)
+
+    # Matches nach Qualität sortieren
+    matches = sorted(matches, key=lambda x: x.distance)
+
+    # Nur die besten Matches behalten
+    num_good_matches = int(len(matches) * good_match_percent)
+    matches = matches[:num_good_matches]
+
+    # Punkte extrahieren
+    points1 = np.zeros((len(matches), 2), dtype=np.float32)
+    points2 = np.zeros((len(matches), 2), dtype=np.float32)
+
+    for i, match in enumerate(matches):
+        points1[i, :] = keypoints1[match.queryIdx].pt
+        points2[i, :] = keypoints2[match.trainIdx].pt
+
+    # Homography berechnen
+    h, mask = cv2.findHomography(points1, points2, cv2.RANSAC)
+
+    # Bild ausrichten
+    height, width, channels = im2.shape
+    im1_reg = cv2.warpPerspective(im1, h, (width, height))
+
+    # Bilder speichern
+    cv2.imwrite('assignment_4/aligned.png', im1_reg)
+    im_matches = cv2.drawMatches(im1, keypoints1, im2, keypoints2, matches, None)
+    cv2.imwrite('assignment_4/matches.png', im_matches)
+
+    # Optional: Anzeigen
+    plt.figure(figsize=(10,5))
+    plt.subplot(1,2,1)
+    plt.imshow(cv2.cvtColor(im1_reg, cv2.COLOR_BGR2RGB))
+    plt.title('Aligned Image')
+    plt.axis('off')
+    plt.subplot(1,2,2)
+    plt.imshow(cv2.cvtColor(im_matches, cv2.COLOR_BGR2RGB))
+    plt.title('Matches')
+    plt.axis('off')
+    plt.show()
+
+main()

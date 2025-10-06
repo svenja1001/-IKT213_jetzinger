@@ -96,7 +96,7 @@ def save_images_to_pdf():
     img1 = Image.open('assignment_4/harris.png').convert('RGB')
     img2 = Image.open('assignment_4/aligned.png').convert('RGB')
     img3 = Image.open('assignment_4/matches.png').convert('RGB')
-    img1.save('assignment_4/resultsA4_SvenjaJetzinger.pdf', save_all=True, append_images=[img2, img3])
+    img1.save('assignment_4/resultsA4_ORB_SvenjaJetzinger.pdf', save_all=True, append_images=[img2, img3])
 
 
 main()

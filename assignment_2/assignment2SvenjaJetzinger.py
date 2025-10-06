@@ -105,11 +105,12 @@ def hsv(img):
 # Color shifting
 def hue_shifted(img, emptyPictureArray, hue):
     hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)                  # change picture in HSV
-    hsv_img[:, :, 2] = np.clip(hsv_img[:, :, 2] + hue, 0, 255)      # shift value-channel and limit values to [0, 255] 
+    hsv_img[:, :, 0] = np.clip(hsv_img[:, :, 0] + hue, 0, 255)      # shift value-channel and limit values to [0, 255]; channel0
     shifted_img = cv2.cvtColor(hsv_img, cv2.COLOR_HSV2BGR)          # convert back to BGR
     emptyPictureArray[:] = shifted_img[:]                           # copy result to empty array
     shifted_rgb = cv2.cvtColor(shifted_img, cv2.COLOR_BGR2RGB)      # convert for matplotlib
-    plt.subplot(3, 3, 7)
+    #plt.subplot(3, 3, 7)
+    plt.figure()
     plt.imshow(shifted_rgb)
     plt.title(f'Value Shifted ({hue})')
     plt.axis('off')
@@ -119,7 +120,8 @@ def hue_shifted(img, emptyPictureArray, hue):
 def smoothing(img):
     smoothed = cv2.GaussianBlur(img, (15, 15), 0)                   # apply Gaussian blur with kernel size 15x15
     smoothed_rgb = cv2.cvtColor(smoothed, cv2.COLOR_BGR2RGB)        # convert for matplotlib
-    plt.subplot(3, 3, 8)
+    #plt.subplot(3, 3, 8)
+    plt.figure()
     plt.imshow(smoothed_rgb)
     plt.title('Smoothed Image')
     plt.axis('off')

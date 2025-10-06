@@ -8,14 +8,14 @@ def main():
     
     harris_corner_detection(img)
 
-    # Bilder laden
-    im1 = cv2.imread(str(path) + 'align_this.jpg')          # image_to_align_path
-    im2 = img                                               # reference_image_path
+    # Feature-Based Image Alignment using ORB
+    image_to_align = cv2.imread(str(path) + '/align_this.jpg')              # image_to_align
+    reference_image = img                                                   # reference_image
 
     max_feature = 1500
     good_match_precent = 0.15
 
-    align_images(im1, im2, max_feature, good_match_precent)
+    align_images(image_to_align, reference_image, max_feature, good_match_precent)
 
 
 # Harris Corner Detection
@@ -34,16 +34,16 @@ def harris_corner_detection(img):
     plt.show()
 
 # Feature-Based Image Alignment using ORB
-def align_images(image_to_align_path, reference_image_path, max_features, good_match_percent):
+def align_images(image_to_align, reference_image, max_features, good_match_percent):
     
     # In Graustufen umwandeln
-    im1_gray = cv2.cvtColor(image_to_align_path, cv2.COLOR_BGR2GRAY)
-    im2_gray = cv2.cvtColor(reference_image_path, cv2.COLOR_BGR2GRAY)
+    image_to_align_gray = cv2.cvtColor(image_to_align, cv2.COLOR_BGR2GRAY)
+    reference_image_gray = cv2.cvtColor(reference_image, cv2.COLOR_BGR2GRAY)
 
     # ORB-Features und Deskriptoren finden
     orb = cv2.ORB_create(max_features)
-    keypoints1, descriptors1 = orb.detectAndCompute(im1_gray, None)
-    keypoints2, descriptors2 = orb.detectAndCompute(im2_gray, None)
+    keypoints1, descriptors1 = orb.detectAndCompute(image_to_align_gray, None)
+    keypoints2, descriptors2 = orb.detectAndCompute(reference_image_gray, None)
 
     # Matcher initialisieren
     matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=False)
@@ -68,12 +68,12 @@ def align_images(image_to_align_path, reference_image_path, max_features, good_m
     h, mask = cv2.findHomography(points1, points2, cv2.RANSAC)
 
     # Bild ausrichten
-    height, width, channels = im2.shape
-    im1_reg = cv2.warpPerspective(im1, h, (width, height))
+    height, width, channels = reference_image.shape
+    im1_reg = cv2.warpPerspective(image_to_align, h, (width, height))
 
     # Bilder speichern
     cv2.imwrite('assignment_4/aligned.png', im1_reg)
-    im_matches = cv2.drawMatches(im1, keypoints1, im2, keypoints2, matches, None)
+    im_matches = cv2.drawMatches(image_to_align, keypoints1, reference_image, keypoints2, matches, None)
     cv2.imwrite('assignment_4/matches.png', im_matches)
 
     # Optional: Anzeigen

@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
+from PIL import Image
 
 def main():
     path = 'assignment_4'
@@ -11,12 +12,12 @@ def main():
     # Feature-Based Image Alignment using ORB
     image_to_align = cv2.imread(str(path) + '/align_this.jpg')              # image_to_align
     reference_image = img                                                   # reference_image
-
     max_feature = 1500
     good_match_precent = 0.15
-
     align_images(image_to_align, reference_image, max_feature, good_match_precent)
 
+    # Save images to PDF
+    save_images_to_pdf()
 
 # Harris Corner Detection
 def harris_corner_detection(img):
@@ -33,30 +34,31 @@ def harris_corner_detection(img):
     plt.axis('off')
     plt.show()
 
+
 # Feature-Based Image Alignment using ORB
 def align_images(image_to_align, reference_image, max_features, good_match_percent):
     
-    # In Graustufen umwandeln
+    # grayscale
     image_to_align_gray = cv2.cvtColor(image_to_align, cv2.COLOR_BGR2GRAY)
     reference_image_gray = cv2.cvtColor(reference_image, cv2.COLOR_BGR2GRAY)
 
-    # ORB-Features und Deskriptoren finden
+    # ORB-Features and find Descriptions 
     orb = cv2.ORB_create(max_features)
     keypoints1, descriptors1 = orb.detectAndCompute(image_to_align_gray, None)
     keypoints2, descriptors2 = orb.detectAndCompute(reference_image_gray, None)
 
-    # Matcher initialisieren
+    # Matcher
     matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=False)
     matches = matcher.match(descriptors1, descriptors2, None)
 
-    # Matches nach Qualität sortieren
+    # sort Matches by quality
     matches = sorted(matches, key=lambda x: x.distance)
 
-    # Nur die besten Matches behalten
+    # keep only best Matches
     num_good_matches = int(len(matches) * good_match_percent)
     matches = matches[:num_good_matches]
 
-    # Punkte extrahieren
+    # extract point coordinates from the good matches
     points1 = np.zeros((len(matches), 2), dtype=np.float32)
     points2 = np.zeros((len(matches), 2), dtype=np.float32)
 
@@ -64,19 +66,19 @@ def align_images(image_to_align, reference_image, max_features, good_match_perce
         points1[i, :] = keypoints1[match.queryIdx].pt
         points2[i, :] = keypoints2[match.trainIdx].pt
 
-    # Homography berechnen
+    # calculate Homography
     h, mask = cv2.findHomography(points1, points2, cv2.RANSAC)
 
-    # Bild ausrichten
+    # place image
     height, width, channels = reference_image.shape
     im1_reg = cv2.warpPerspective(image_to_align, h, (width, height))
 
-    # Bilder speichern
+    # save images
     cv2.imwrite('assignment_4/aligned.png', im1_reg)
     im_matches = cv2.drawMatches(image_to_align, keypoints1, reference_image, keypoints2, matches, None)
     cv2.imwrite('assignment_4/matches.png', im_matches)
 
-    # Optional: Anzeigen
+    # plot images
     plt.figure(figsize=(10,5))
     plt.subplot(1,2,1)
     plt.imshow(cv2.cvtColor(im1_reg, cv2.COLOR_BGR2RGB))
@@ -87,5 +89,14 @@ def align_images(image_to_align, reference_image, max_features, good_match_perce
     plt.title('Matches')
     plt.axis('off')
     plt.show()
+
+
+# save images in PDF
+def save_images_to_pdf():
+    img1 = Image.open('assignment_4/harris.png').convert('RGB')
+    img2 = Image.open('assignment_4/aligned.png').convert('RGB')
+    img3 = Image.open('assignment_4/matches.png').convert('RGB')
+    img1.save('assignment_4/resultsA4_SvenjaJetzinger.pdf', save_all=True, append_images=[img2, img3])
+
 
 main()

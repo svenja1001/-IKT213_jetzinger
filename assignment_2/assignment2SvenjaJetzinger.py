@@ -103,22 +103,17 @@ def hsv(img):
     
 
 # Color shifting
-def hue_shifted(img, emptyPictureArray, hue):
-    #hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)                  # change picture in HSV
-    #hsv_img[:, :, 0] = np.clip(hsv_img[:, :, 0] + hue, 0, 255)      # shift value-channel and limit values to [0, 255]; channel0
-    #shifted_img = cv2.cvtColor(hsv_img, cv2.COLOR_HSV2BGR)          # convert back to BGR
-    #emptyPictureArray[:] = shifted_img[:]                           # copy result to empty array
-    #shifted_rgb = cv2.cvtColor(shifted_img, cv2.COLOR_BGR2RGB)      # convert for matplotlib
-    
-    shifted_img = np.clip(img.astype(np.int16) + value, 0, 255).astype(np.uint8)  # Wert zu allen RGB-Kanälen addieren
-    emptyPictureArray[:] = shifted_img[:]                                         # Ergebnis ins leere Array kopieren
-    shifted_rgb = cv2.cvtColor(shifted_img, cv2.COLOR_BGR2RGB)                    # Für matplotlib konvertieren
-    
+def hue_shifted(img, emptyPictureArray, hue): 
+    # Add the value (hue) to all color channels and clip to [0, 255]
+    shifted_img = np.clip(img.astype(np.int16) + hue, 0, 255).astype(np.uint8)
+    emptyPictureArray[:] = shifted_img[:]                           # Copy result to empty array
+    shifted_rgb = cv2.cvtColor(shifted_img, cv2.COLOR_BGR2RGB)      # convert for matplotlib 
+
     plt.subplot(3, 3, 7)
     plt.imshow(shifted_rgb)
     plt.title(f'Value Shifted ({hue})')
     plt.axis('off')
-    #cv2.imwrite('ValueShiftingSvenjaJetzingerA2.png', shifted_img)  # save the image
+    cv2.imwrite('ValueShiftingSvenjaJEtzingerA2.png', shifted_img)  # Save the shifted image
     
 
 # Smoothing

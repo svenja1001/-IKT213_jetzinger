@@ -113,7 +113,7 @@ def hue_shifted(img, emptyPictureArray, hue):
     plt.imshow(shifted_rgb)
     plt.title(f'Value Shifted ({hue})')
     plt.axis('off')
-    cv2.imwrite('ValueShiftingSvenjaJEtzingerA2.png', shifted_img)  # Save the shifted image
+    #cv2.imwrite('ValueShiftingSvenjaJEtzingerA2.png', shifted_img)  # Save the shifted image
     
 
 # Smoothing

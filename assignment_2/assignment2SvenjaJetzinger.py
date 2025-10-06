@@ -104,24 +104,28 @@ def hsv(img):
 
 # Color shifting
 def hue_shifted(img, emptyPictureArray, hue):
-    hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)                  # change picture in HSV
-    hsv_img[:, :, 0] = np.clip(hsv_img[:, :, 0] + hue, 0, 255)      # shift value-channel and limit values to [0, 255]; channel0
-    shifted_img = cv2.cvtColor(hsv_img, cv2.COLOR_HSV2BGR)          # convert back to BGR
-    emptyPictureArray[:] = shifted_img[:]                           # copy result to empty array
-    shifted_rgb = cv2.cvtColor(shifted_img, cv2.COLOR_BGR2RGB)      # convert for matplotlib
-    #plt.subplot(3, 3, 7)
-    plt.figure()
+    #hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)                  # change picture in HSV
+    #hsv_img[:, :, 0] = np.clip(hsv_img[:, :, 0] + hue, 0, 255)      # shift value-channel and limit values to [0, 255]; channel0
+    #shifted_img = cv2.cvtColor(hsv_img, cv2.COLOR_HSV2BGR)          # convert back to BGR
+    #emptyPictureArray[:] = shifted_img[:]                           # copy result to empty array
+    #shifted_rgb = cv2.cvtColor(shifted_img, cv2.COLOR_BGR2RGB)      # convert for matplotlib
+    
+    shifted_img = np.clip(img.astype(np.int16) + value, 0, 255).astype(np.uint8)  # Wert zu allen RGB-Kanälen addieren
+    emptyPictureArray[:] = shifted_img[:]                                         # Ergebnis ins leere Array kopieren
+    shifted_rgb = cv2.cvtColor(shifted_img, cv2.COLOR_BGR2RGB)                    # Für matplotlib konvertieren
+    
+    plt.subplot(3, 3, 7)
     plt.imshow(shifted_rgb)
     plt.title(f'Value Shifted ({hue})')
     plt.axis('off')
+    #cv2.imwrite('ValueShiftingSvenjaJetzingerA2.png', shifted_img)  # save the image
     
 
 # Smoothing
 def smoothing(img):
     smoothed = cv2.GaussianBlur(img, (15, 15), 0)                   # apply Gaussian blur with kernel size 15x15
     smoothed_rgb = cv2.cvtColor(smoothed, cv2.COLOR_BGR2RGB)        # convert for matplotlib
-    #plt.subplot(3, 3, 8)
-    plt.figure()
+    plt.subplot(3, 3, 8)
     plt.imshow(smoothed_rgb)
     plt.title('Smoothed Image')
     plt.axis('off')
